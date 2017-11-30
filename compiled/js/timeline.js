@@ -28,6 +28,11 @@
 TL.debug = false;
 
 
+/* HAX
+============ */
+TL.initialWidth = 0;
+
+
 
 /*	TL.Bind
 ================================================== */
@@ -10653,7 +10658,6 @@ TL.StorySlider = TL.Class.extend({
 		this._el.slider_container			= TL.Dom.create('div', 'tl-slider-container tlanimate', this._el.slider_container_mask);
 		this._el.slider_item_container		= TL.Dom.create('div', 'tl-slider-item-container', this._el.slider_container);
 
-
 		// Update Size
 		this.options.width = this._el.container.offsetWidth;
 		this.options.height = this._el.container.offsetHeight;
@@ -10670,6 +10674,7 @@ TL.StorySlider = TL.Class.extend({
 
 		this._el.slider_container.style.left="0px";
 
+        /*
 		if (TL.Browser.touch) {
 			//this._el.slider_touch_mask = TL.Dom.create('div', 'tl-slider-touch-mask', this._el.slider_container_mask);
 			this._swipable = new TL.Swipable(this._el.slider_container_mask, this._el.slider_container, {
@@ -10686,6 +10691,7 @@ TL.StorySlider = TL.Class.extend({
 			this._message.updateMessage(this._("swipe_to_navigate"));
 			this._message.addTo(this._el.container);
 		}
+        */
 
 	},
 
@@ -10827,7 +10833,7 @@ TL.TimeNav = TL.Class.extend({
 			this._el.container = elem;
 		} else {
 			this._el.container = TL.Dom.get(elem);
-		}
+        }
 
 		this.config = timeline_config;
 
@@ -10935,10 +10941,11 @@ TL.TimeNav = TL.Class.extend({
 		this.max_rows = Math.round((this.options.height - this._el.timeaxis_background.offsetHeight - (this.options.marker_padding)) / marker_height_min);
 		if (this.max_rows < 1) {
 			this.max_rows = 1;
-		}
+        }
+
 		return new TL.TimeScale(this.config, {
-			groups: this.getGroups(),
-            display_width: this._el.container.offsetWidth,
+            groups: this.getGroups(),
+            display_width: TL.initialWidth,
             screen_multiplier: this.options.scale_factor,
             max_rows: this.max_rows
 
@@ -11452,7 +11459,7 @@ TL.TimeNav = TL.Class.extend({
 		this.goToId(this.current_id, true);
 	},
 
-	_drawTimeline: function(fast) {
+    _drawTimeline: function (fast) {
 		this.timescale = this._getTimeScale();
 		this.timeaxis.drawTicks(this.timescale, this.options.optimal_tick_width);
 		this._positionMarkers(true);
@@ -11485,7 +11492,7 @@ TL.TimeNav = TL.Class.extend({
 			}
 		} else {
 			do_update = true;
-		}
+        }
 
 		// Perform update or redraw
 		if (do_update) {
@@ -13139,7 +13146,10 @@ TL.Timeline = TL.Class.extend({
 			this._el.container = elem;
 		} else {
 			this._el.container = TL.Dom.get(elem);
-		}
+        }
+
+        var width = parseInt(this._el.container.style.width);
+        TL.initialWidth = width;
 
 		// Slider
 		this._storyslider = {};
@@ -13162,7 +13172,7 @@ TL.Timeline = TL.Class.extend({
 		this.options = {
 			script_path: 				"",
 			height: 					this._el.container.offsetHeight,
-			width: 						this._el.container.offsetWidth,
+			width: 						width,
 			debug: 						false,
 			is_embed: 					false,
 			is_full_embed: 				false,
@@ -13349,7 +13359,7 @@ TL.Timeline = TL.Class.extend({
 	================================================== */
 
 	// Add an event
-	add: function(data) {
+    add: function (data) {
 		var unique_id = this.config.addEvent(data);
 
 		var n = this._getEventIndex(unique_id);
