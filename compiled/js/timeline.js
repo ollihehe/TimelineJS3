@@ -10942,10 +10942,20 @@ TL.TimeNav = TL.Class.extend({
 		if (this.max_rows < 1) {
 			this.max_rows = 1;
         }
+		
+		var width = 0;
+		if(this._el.container.offsetWidth == 0)
+		{
+			width = TL.initialWidth;
+		}
+		else
+		{
+			width = this._el.container.offsetWidth;
+		}
 
 		return new TL.TimeScale(this.config, {
             groups: this.getGroups(),
-            display_width: TL.initialWidth,
+            display_width: width,
             screen_multiplier: this.options.scale_factor,
             max_rows: this.max_rows
 
