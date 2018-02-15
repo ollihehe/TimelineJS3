@@ -11009,7 +11009,7 @@ TL.TimeNav = TL.Class.extend({
 		}
 		this.options.scale_factor = factor;
 		//this._updateDrawTimeline(true);
-		this.goToId(this.current_id, !this._updateDrawTimeline(true), true);
+		this.goToId(this.current_id, !this._updateDrawTimeline(true), false);
 	},
 
 	/*	Groups
